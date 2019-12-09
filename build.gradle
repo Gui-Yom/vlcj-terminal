@@ -1,0 +1,43 @@
+plugins {
+    id 'java'
+    id 'application'
+    id "com.github.johnrengelman.shadow" version "5.2.0"
+}
+
+group 'com.limelion'
+version '1.2.0'
+
+mainClassName = "com.limelion.nggyu.Main"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    jcenter()
+    // JitPack
+    maven {
+        url "https://jitpack.io"
+    }
+}
+
+def jlineVersion = "3.13.2"
+
+dependencies {
+    implementation "org.jline:jline-terminal:$jlineVersion"
+    implementation "org.jline:jline-terminal-jansi:$jlineVersion"
+    implementation "com.github.LimeiloN:anscapes:0.8.1"
+    implementation "uk.co.caprica:vlcj:4.2.0"
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+shadowJar {
+    archiveFileName = "vlcj-terminal.jar"
+    manifest {
+        attributes "Main-Class": mainClassName
+    }
+}
