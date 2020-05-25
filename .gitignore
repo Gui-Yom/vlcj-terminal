@@ -2,4 +2,4 @@
 .gradle/
 build/
 out/
-testresources/
+src/test/resources/rickrolled.mp4
