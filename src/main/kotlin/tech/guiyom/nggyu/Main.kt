@@ -5,6 +5,9 @@ import org.jline.terminal.TerminalBuilder
 import org.jline.terminal.impl.DumbTerminal
 import tech.guiyom.anscapes.Anscapes
 import tech.guiyom.anscapes.ColorMode
+import tech.guiyom.anscapes.renderer.AnsiImageRenderer
+import tech.guiyom.anscapes.renderer.ImageRenderer
+import tech.guiyom.anscapes.renderer.RgbImageRenderer
 import java.io.IOException
 import java.io.OutputStream
 import java.io.PrintStream
@@ -12,7 +15,7 @@ import java.nio.charset.StandardCharsets
 import kotlin.system.exitProcess
 
 fun main(args: Array<String>) {
-    if (args.size < 4) exitProcess(-2)
+    if (args.size < 5) exitProcess(-2)
 
     var term: Terminal? = null
     term = TerminalBuilder.builder()
@@ -46,13 +49,20 @@ fun main(args: Array<String>) {
 
     try {
         val cmode = ColorMode.valueOf(args[0])
-        val targetWidth = args[1].toInt()
-        val targetHeight = args[2].toInt()
+        val bias = args[1].toInt()
+        val targetWidth = args[2].toInt()
+        val targetHeight = args[3].toInt()
+
+        val renderer: ImageRenderer = if (cmode == ColorMode.RGB) {
+            RgbImageRenderer(targetWidth, targetHeight, bias)
+        } else {
+            AnsiImageRenderer(targetWidth, targetHeight, bias)
+        }
 
         // Let's go private since we'll print thousands of lines a second
         // This also prevent scroll since the terminal buffer will match the window perfectly
         term.writer().print(Anscapes.ALTERNATIVE_SCREEN_BUFFER)
-        TerminalVideo(cmode, targetWidth, targetHeight, args[3]).use {
+        TerminalVideo(renderer, args[4]).use {
             // Blocks until video ends
             it.renderTo(term.writer())
         }

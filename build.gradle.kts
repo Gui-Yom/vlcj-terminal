@@ -28,7 +28,7 @@ dependencies {
 
     implementation("org.jline:jline-terminal:$jlineVersion")
     implementation("org.jline:jline-terminal-jansi:$jlineVersion")
-    implementation("com.github.Gui-Yom:anscapes:0.9.0")
+    implementation("com.github.Gui-Yom:anscapes:0.11.0")
     implementation("uk.co.caprica:vlcj:$vlcjVersion")
 }
 
